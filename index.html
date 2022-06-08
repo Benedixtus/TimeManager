@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeManager</title>
+    
+    <script type="module">
+        
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js';
+        import { getDatabase, ref, get, child, push, update, onValue } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
+       
+        const firebaseConfig = {
+          apiKey: "AIzaSyAirSV4m4D9BOVafRcfTJCSLZSwvCyNpZQ",
+          authDomain: "timemanager-2e3c6.firebaseapp.com",
+          databaseURL: "https://timemanager-2e3c6-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "timemanager-2e3c6",
+          storageBucket: "timemanager-2e3c6.appspot.com",
+          messagingSenderId: "717351459423",
+          appId: "1:717351459423:web:bfa158870137911f6999ea",
+          measurementId: "G-NZFWH8LPM0"
+        };
+      
+        const firebaseApp = initializeApp(firebaseConfig); 
+        const db = getDatabase(firebaseApp);
+        const dbref = ref(db);
+
+        var updates = {};
+        updates['benedixtus/alltime'] = 7;
+        update(dbref, updates);
+        
+
+        const starCountRef = ref(db, 'benedixtus');
+        onValue(starCountRef, (snapshot) => {
+        const data = snapshot.val();
+            
+        });
+
+
+
+
+    </script>
+</head>
+<body>
+    <div id="postElement"></div>
+
+    <script>
+        
+    </script>
+</body>
+</html>
