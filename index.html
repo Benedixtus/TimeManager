@@ -4,49 +4,99 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TimeManager</title>
-    
-    <script type="module">
-        
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js';
-        import { getDatabase, ref, get, child, push, update, onValue } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
-       
-        const firebaseConfig = {
-          apiKey: "AIzaSyAirSV4m4D9BOVafRcfTJCSLZSwvCyNpZQ",
-          authDomain: "timemanager-2e3c6.firebaseapp.com",
-          databaseURL: "https://timemanager-2e3c6-default-rtdb.europe-west1.firebasedatabase.app",
-          projectId: "timemanager-2e3c6",
-          storageBucket: "timemanager-2e3c6.appspot.com",
-          messagingSenderId: "717351459423",
-          appId: "1:717351459423:web:bfa158870137911f6999ea",
-          measurementId: "G-NZFWH8LPM0"
-        };
-      
-        const firebaseApp = initializeApp(firebaseConfig); 
-        const db = getDatabase(firebaseApp);
-        const dbref = ref(db);
-
-        var updates = {};
-        updates['benedixtus/alltime'] = 7;
-        update(dbref, updates);
-        
-
-        const starCountRef = ref(db, 'benedixtus');
-        onValue(starCountRef, (snapshot) => {
-        const data = snapshot.val();
-            
-        });
-
-
-
-
-    </script>
+    <title>Document</title>
 </head>
 <body>
-    <div id="postElement"></div>
+    <div id="writeout"></div>
+    <div id="button">
+        <button onclick="setStart()">dsg</button>
+        <button onclick="writedata()">ddgsdfg</button>
+        <button onclick="setDuration()">Duration</button>
+        <button onclick="resetLocal()">Reset</button>
+    </div>
 
     <script>
-        
+        var alltime = localStorage.getItem("alltimE");
+        var start = localStorage.getItem("starT");
+        var duration = localStorage.getItem("duratioN");
+
+        function setDuration(){
+            var a = prompt('Adj meg új hosszt:');
+            duration = a;
+            console.log('A hossz megvaltozott: ' + localStorage.getItem('duration'));
+            saveLocal();
+        }
+        function resetLocal(){
+            localStorage.setItem('starT', 0);
+            localStorage.setItem('alltimE', 0);
+            localStorage.setItem('duratioN', 50);
+            start = 0;
+            alltime = 0;
+            duration = 50;
+            writedata();
+
+        }
+        function setStart() {
+            if(start == 0){
+                start = Date.now();
+                writedata();
+                window.setInterval('writedata()', 2000);
+            }else {
+                alltime += Date.now() - start;
+                saveLocal();
+                start = 0;
+                writedata();
+            }
+        }
+        function getSession() {
+            if(start > 0 ){
+            var a = (Date.now() - start);
+            return a;
+            }else{ return 0}
+        }
+        function getWhole(){
+            var a = (alltime) + getSession();
+            return a;
+        }
+        function getPercent(){
+            var a = (getWhole()/3600000) / duration;
+            a = a.toFixed(6);
+            return a + "%";
+        }
+        function getStartDate(){
+            if(start==0){
+                return "It's paused";
+            }
+            var date = new Date(start);
+            date = date.toLocaleString('sv');
+            return date;
+        }
+        function hoursMinutes(a) {
+            a = a/60000;
+            hours = a / 60;
+            hours = Math.floor(hours);
+            a = a - (hours * 60);
+            minutes = a;
+            return hours + ' hours ' + minutes.toFixed(3) + " minutes"; 
+        }
+        function saveLocal(){
+            start = localStorage.setItem('starT', start);
+            alltime = localStorage.setItem('alltimE', alltime);
+            duration = localStorage.setItem('duratioN', duration);
+        }
+        function writedata(){
+            var out = "";
+            out += '<p>Start: '+ getStartDate() + '</p>';
+            out += '<p>This Session: '+ hoursMinutes(getSession()) + '</p>';
+            out += '<p>This Session: '+ hoursMinutes(getWhole()) + '</p>';
+            out += '<p>All Done: ' + getPercent() + '</p>';
+
+            document.getElementById("writeout").innerHTML = out;
+        }
+        console.log('alltime: ' + alltime);
+        console.log('start: ' + start);
+        console.log('duration: ' + duration);
+        writedata();
     </script>
 </body>
 </html>
